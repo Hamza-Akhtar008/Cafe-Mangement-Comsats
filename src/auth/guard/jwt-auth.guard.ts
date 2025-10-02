@@ -11,14 +11,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) return true;
-    return super.canActivate(context);
-  }
+
+canActivate(context: ExecutionContext) {
+  const req = context.switchToHttp().getRequest();
+  console.log('Headers:', req.headers.authorization);
+  return super.canActivate(context);
+}
+
+
+
+
+
 }
 
 

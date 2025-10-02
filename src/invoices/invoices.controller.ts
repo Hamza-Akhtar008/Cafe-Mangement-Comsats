@@ -12,14 +12,14 @@ import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { Roles } from 'src/auth/guard/roles.decorator';
 
 @ApiTags('Invoices')
-@ApiBearerAuth() // Swagger shows lock icon for JWT
+@ApiBearerAuth('access-token') // Swagger shows lock icon for JWT
 @Controller('invoices')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard)
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}
 
   @Post()
-  @Roles(UserRole.MANAGER)
+
   @ApiBody({ type: CreateInvoiceDto })
   @ApiResponse({ status: 201, description: 'Invoice created successfully' })
   create(@Req() req, @Body() body: CreateInvoiceDto) {

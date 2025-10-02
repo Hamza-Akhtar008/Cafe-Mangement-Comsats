@@ -12,14 +12,15 @@ import { Roles } from 'src/auth/guard/roles.decorator';
 @ApiTags('reports')
  // tells Swagger that this controller requires JWT Bearer token
 @Controller('reports')
+@ApiBearerAuth('access-token')
 
 export class ReportsController {
-    constructor(private readonly reportsService: ReportsService) {}
-    
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRole.OWNER)
-    @Get('daily')
-
+  constructor(private readonly reportsService: ReportsService) {}
+  
+  @Get('daily')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER)
+  
   @ApiOperation({ summary: 'Get daily sales, expenses, and profit' })
   @ApiQuery({ 
     name: 'date', 

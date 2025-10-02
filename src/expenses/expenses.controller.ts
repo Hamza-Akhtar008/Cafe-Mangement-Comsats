@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/guard/roles.decorator';
 import { UserRole } from 'src/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
@@ -12,6 +12,7 @@ import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @ApiTags('expenses')
 @Controller('expenses')
+@ApiBearerAuth('access-token') 
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
