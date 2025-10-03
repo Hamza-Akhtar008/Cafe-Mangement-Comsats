@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Get, Query, ConflictException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, ConflictException, Delete, Param, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiOkResponse, ApiBody, ApiNotFoundResponse } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Public } from 'src/auth/guard/public.decorator';
@@ -39,4 +39,32 @@ export class UsersController {
   async findByEmail(@Query('email') email: string) {
     return this.usersService.findByEmail(email);
   }
+
+ @Get('managers')
+  @ApiOkResponse({ type: User })
+  async getallmanagers( ) {
+    return this.usersService.getAllManagers();
+  }
+
+
+   @Delete(':id')
+  @ApiOkResponse({ description: 'User deleted successfully' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async deleteUser(@Param('id') id: string) {
+        const userId = parseInt(id, 10);
+    if (isNaN(userId)) {
+        throw new BadRequestException('Invalid ID');
+    }
+    // Call the service method to delete the user by ID
+    const deletedUser = await this.usersService.deleteUserById(userId);
+
+    if (!deletedUser) {
+      // If the user was not found, return a 404 error with a message
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    // If user is deleted, return a success message with HTTP 200 OK
+    return { message: 'User deleted successfully' };
+  }
+
 }

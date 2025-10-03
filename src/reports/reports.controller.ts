@@ -29,9 +29,10 @@ export class ReportsController {
     description: 'Date in YYYY-MM-DD format. Defaults to today if not provided.' 
   })
 
-  getDaily(@Req() req, @Query('date') date?: string) {
-    console.log('Reached controller!', req.user);
-    const reportDate = date ?? new Date().toISOString().split('T')[0];
-    return { date: reportDate, user: req.user, report: 'dummy report data' };
+  async getDaily(@Req() req, @Query('date') date?: string) {
+
+  
+    const report =await this.reportsService.getDailyReport(date);
+    return { date: date, user: req.user, report: report };
   }
 }

@@ -47,4 +47,22 @@ if (!email) {
   async findByEmail(email: string) {
     return this.userRepo.findOne({ where: { email } });
   }
+
+ async getAllManagers() {
+  return this.userRepo.find({
+    where: { role: UserRole.MANAGER },
+  });
+}
+
+ async deleteUserById(id: number): Promise<User | null> {
+    const user = await this.userRepo.findOne({where:{id}});
+
+    if (!user) {
+      return null; // If user not found, return null
+    }
+
+    await this.userRepo.remove(user); // Delete the user
+    return user; // Return the deleted user info
+  }
+
 }

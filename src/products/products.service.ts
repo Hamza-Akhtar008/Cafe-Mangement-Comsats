@@ -13,12 +13,12 @@ export class ProductsService {
     private readonly productRepo: Repository<Product>,
   ) {}
 
-  create(dto: CreateProductDto) {
-    const product = this.productRepo.create(dto);
+  async create(dto: CreateProductDto) {
+    const product = await this.productRepo.create(dto);
     return this.productRepo.save(product);
   }
 
-  findAll() {
+ async findAll() {
     return this.productRepo.find();
   }
 
